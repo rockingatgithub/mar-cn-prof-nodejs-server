@@ -4,6 +4,7 @@ const app = express()
 const db = require('./configs/mongoose')
 const Student = require('./models/student')
 const passport = require('./configs/passportLocal')
+// const passportGoogle = require('./configs/passportGoogle')
 
 app.use(express.static('assets'))
 app.use(express.urlencoded())
@@ -23,6 +24,26 @@ app.post('/login', passport.authenticate('local', {session: false})  , (req, res
         message: "Unauthorized!"
     })
 })
+
+app.get('/google',
+    passport.authenticate('google', {
+            scope:
+                ['email', 'profile']
+        }
+    ));
+
+app.get('/google/callback',
+    passport.authenticate('google', {
+        failureRedirect: '/failed',
+        session: false,
+    }),
+    function (req, res) {
+        return res.status(200).json({
+            data: req.user
+        })
+
+    }
+);
 
 
 app.post('/addStudent', (req, res) => {
