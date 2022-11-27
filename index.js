@@ -12,6 +12,8 @@ app.use(express.json())
 
 passport.initialize()
 
+app.use('/', require('./routes'))
+
 app.post('/login', passport.authenticate('local', {session: false})  , (req, res) => {
 
     console.log(req.user)
@@ -24,26 +26,6 @@ app.post('/login', passport.authenticate('local', {session: false})  , (req, res
         message: "Unauthorized!"
     })
 })
-
-app.get('/google',
-    passport.authenticate('google', {
-            scope:
-                ['email', 'profile']
-        }
-    ));
-
-app.get('/google/callback',
-    passport.authenticate('google', {
-        failureRedirect: '/failed',
-        session: false,
-    }),
-    function (req, res) {
-        return res.status(200).json({
-            data: req.user
-        })
-
-    }
-);
 
 
 app.post('/addStudent', (req, res) => {

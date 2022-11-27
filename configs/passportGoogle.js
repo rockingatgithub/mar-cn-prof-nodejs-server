@@ -27,3 +27,5 @@ passport.use(new GoogleStrategy({
             return done(null, user);
     }
 ));
+
+module.exports = passport
